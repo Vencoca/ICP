@@ -11,7 +11,7 @@ cv::Point2f find_center_HSV(cv::Mat& frame) {
     cv::Mat frame_hsv;
     cv::cvtColor(frame, frame_hsv, cv::COLOR_BGR2HSV);
 
-    cv::Scalar lower_bound(25, 50, 50);
+    cv::Scalar lower_bound(55, 50, 50);
     cv::Scalar upper_bound(65, 255, 255);
     cv::Mat frame_treshold;
     cv::inRange(frame_hsv, lower_bound, upper_bound, frame_treshold);
@@ -35,12 +35,6 @@ s_globals globals;
 
 int main()
 {
-    /*
-    cv::Mat frame = cv::imread("resources/lightbulb.jpg");
-    cv::Mat frame2;
-    frame.copyTo(frame2);
-    */
-
     cv::Mat frame;
 
     globals.capture = cv::VideoCapture(cv::CAP_DSHOW);
@@ -64,51 +58,6 @@ int main()
 
         cv::waitKey(1);
     }
-
-    
-
-    /*
-    int sx = 0, sy = 0, sw = 0;
-    for (int i = 0; i < frame.rows; i++) 
-    {
-        for (int j = 0; j < frame.cols; j++)
-        {
-            cv::Vec3b pixel = frame.at<cv::Vec3b>(i, j);
-            unsigned char Y = 0.299 * pixel[2] + 0.587 * pixel[1] + 0.114 * pixel[0];
-
-            if (Y < 228) {
-                Y = 0;
-            }
-            else {
-                Y = 255;
-                sx += j;
-                sy += i;
-                sw++;
-
-            }
-            frame2.at<cv::Vec3b>(i, j) = cv::Vec3b(Y, Y, Y);
-        }
-    }
-
-   
-
-    cv::Point2i center((float)sx / sw / frame.cols, (float)sy / sw / frame.rows);
-    cv::Point2f center_relative((float)center.x / frame.cols, (float)center.y / frame.rows);
-    
-    std::cout << "sted zarovky abs" << center << '\n';
-    std::cout << "sted zarovky rel" << center_relative << '\n';std::cout << "Hello World!\n";
-    std::cout << "sx-a-sd-a-sd-a-sd-a-s-d-a-sd-a" << (float)sx/sw/frame.cols << '\n';
-
-    draw_cross_relative(frame, center_relative, 25);
-    cv::namedWindow("frame");
-    cv::imshow("frame", frame);
-    cv::imshow("frame2", frame2);
-
-    while (true)
-    {
-        
-    }
-    */
     return(EXIT_SUCCESS);
 }
 
