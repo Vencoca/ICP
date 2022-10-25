@@ -5,79 +5,74 @@
 
 void draw_cross_relative(cv::Mat& img, cv::Point2f center_relative, int size);
 void draw_cross(cv::Mat& img, int x, int y, int size);
-void kamera();
+void img_process_code();
 cv::Point2f find_center_HSV(cv::Mat& frame);
 
-
-cv::Point2f find_center_HSV(cv::Mat& frame) {
-    cv::Mat frame_hsv;
-    cv::cvtColor(frame, frame_hsv, cv::COLOR_BGR2HSV);
-
-    cv::Scalar lower_bound(55, 50, 50);
-    cv::Scalar upper_bound(65, 255, 255);
-    cv::Mat frame_treshold;
-    cv::inRange(frame_hsv, lower_bound, upper_bound, frame_treshold);
-
-    cv::namedWindow("frametr");
-    cv::imshow("frametr", frame_treshold);
-
-    std::vector<cv::Point> white_pixels;
-    cv::findNonZero(frame_treshold, white_pixels);
-    cv::Point white_reduced = std::reduce(white_pixels.begin(), white_pixels.end());
-
-    cv::Point2f center_relative((float)white_reduced.x / white_pixels.size()/frame.cols, (float)white_reduced.y / white_pixels.size()/frame.rows);
-    return center_relative;
-}
+struct img_data_s {
+    cv::Point2f center_relative;
+    cv::Mat frame;
+};
 
 typedef struct s_globals {
     cv::VideoCapture capture;
 } s_globals;
 
 s_globals globals;
-
-
-cv::Mat frame;
-cv::Point2f center_relative;
+std::unique_ptr<img_data_s> img_data_p;
+std::mutex my_mutex;
 
 int main(){
-    std::thread tredik = std::thread(kamera);
-
-    while (true) {
-        std::cout << "stred" << center_relative << "\n";
-        if (frame.empty()){
-            cv::waitKey(1);
+    
+    cv::Mat frame;
+    globals.capture = cv::VideoCapture(cv::CAP_DSHOW);
+    std::unique_ptr<img_data_s> img_data_local;
+    cv::namedWindow("frame");
+    bool new_data = false;
+    std::thread img_thread(img_process_code);
+    while (globals.capture.isOpened()) {
+        my_mutex.lock();
+        if (img_data_p && !img_data_p->frame.empty()) {
+            img_data_local = std::move(img_data_p);
+            new_data = true;
         }
         else {
-            draw_cross_relative(frame, center_relative, 25);
-            cv::namedWindow("frame");
-            cv::imshow("frame", frame);
+            new_data = false;
         }
-        /*
-      
-        draw_cross_relative(frame, center_relative, 25);
-        cv::namedWindow("frame");
-        cv::imshow("frame", frame);
-        */
-        
+        my_mutex.unlock();
+        if (new_data) {
+            std::cout << "sted zarovky relativne" << img_data_local->center_relative << "\n";
+            draw_cross_relative(img_data_local->frame, img_data_local->center_relative, 25);
+            cv::imshow("frame", img_data_local->frame);
+        }
+        else {
+            std::cout << ".";
+        }
+        cv::waitKey(16);
     }
-    tredik.join();
     return(EXIT_SUCCESS);
 }
 
-void kamera() {
-    while (true){
-        globals.capture = cv::VideoCapture(cv::CAP_DSHOW);
-        if (!globals.capture.isOpened()) {
-            std::cerr << "Faile :(" << "\n";
-            exit(EXIT_FAILURE);
-        }
+void img_process_code() {
+    cv::Mat frame;
+    while (globals.capture.isOpened()) {
         globals.capture.read(frame);
-        /*
         if (frame.empty()) {
-            std::cerr << "device closed (or video at the end)" << "\n";
+            std::cerr << "device closed" << "\n";
+            globals.capture.release();
             break;
-        }*/
-        cv::Point2f center_relative = find_center_HSV(frame);
+        }
+        //create new result
+        std::unique_ptr<img_data_s> img_data_local = std::make_unique<img_data_s>();
+        //compute new result
+        img_data_local->center_relative = find_center_HSV(frame);
+        frame.copyTo(img_data_local->frame);
+
+        //synced send
+        my_mutex.lock();
+        img_data_p = std::move(img_data_local);
+        my_mutex.unlock();
+        //simulate 10 FPS
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
@@ -107,4 +102,24 @@ void draw_cross_relative(cv::Mat& img, cv::Point2f center_relative, int size)
 
     cv::line(img, p1, p2, CV_RGB(255, 0, 0), 3);
     cv::line(img, p3, p4, CV_RGB(255, 0, 0), 3);
+}
+
+cv::Point2f find_center_HSV(cv::Mat& frame) {
+    cv::Mat frame_hsv;
+    cv::cvtColor(frame, frame_hsv, cv::COLOR_BGR2HSV);
+
+    cv::Scalar lower_bound(55, 50, 50);
+    cv::Scalar upper_bound(65, 255, 255);
+    cv::Mat frame_treshold;
+    cv::inRange(frame_hsv, lower_bound, upper_bound, frame_treshold);
+
+    //cv::namedWindow("frametr");
+    //cv::imshow("frametr", frame_treshold);
+
+    std::vector<cv::Point> white_pixels;
+    cv::findNonZero(frame_treshold, white_pixels);
+    cv::Point white_reduced = std::reduce(white_pixels.begin(), white_pixels.end());
+
+    cv::Point2f center_relative((float)white_reduced.x / white_pixels.size() / frame.cols, (float)white_reduced.y / white_pixels.size() / frame.rows);
+    return center_relative;
 }
