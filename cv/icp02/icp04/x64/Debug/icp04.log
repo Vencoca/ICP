@@ -1,0 +1,2 @@
+﻿  icp04.cpp
+C:\Users\vacla\Documents\Github\ICP\cv\icp02\icp04\icp04.cpp(3,10): fatal  error C1083: Cannot open include file: 'opencv2/opencv.hpp': No such file or directory

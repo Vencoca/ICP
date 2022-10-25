@@ -1,9 +1,11 @@
 ﻿#include <iostream>
 #include <numeric>
+#include <thread>
 #include <opencv2/opencv.hpp>
 
 void draw_cross_relative(cv::Mat& img, cv::Point2f center_relative, int size);
 void draw_cross(cv::Mat& img, int x, int y, int size);
+void kamera();
 cv::Point2f find_center_HSV(cv::Mat& frame);
 
 
@@ -33,34 +35,51 @@ typedef struct s_globals {
 
 s_globals globals;
 
-int main()
-{
-    cv::Mat frame;
 
-    globals.capture = cv::VideoCapture(cv::CAP_DSHOW);
-    if (!globals.capture.isOpened()) {
-        std::cerr << "Faile :(" << "\n";
-        exit(EXIT_FAILURE);
-    }
-    
+cv::Mat frame;
+cv::Point2f center_relative;
+
+int main(){
+    std::thread tredik = std::thread(kamera);
+
     while (true) {
-        globals.capture.read(frame);
-        if (frame.empty()) {
-            std::cerr << "device closed (or video at the end)" << "\n";
-            break;
-        }
-
-        cv::Point2f center_relative = find_center_HSV(frame);
         std::cout << "stred" << center_relative << "\n";
+        if (frame.empty()){
+            cv::waitKey(1);
+        }
+        else {
+            draw_cross_relative(frame, center_relative, 25);
+            cv::namedWindow("frame");
+            cv::imshow("frame", frame);
+        }
+        /*
+      
         draw_cross_relative(frame, center_relative, 25);
         cv::namedWindow("frame");
         cv::imshow("frame", frame);
-
-        cv::waitKey(1);
+        */
+        
     }
+    tredik.join();
     return(EXIT_SUCCESS);
 }
 
+void kamera() {
+    while (true){
+        globals.capture = cv::VideoCapture(cv::CAP_DSHOW);
+        if (!globals.capture.isOpened()) {
+            std::cerr << "Faile :(" << "\n";
+            exit(EXIT_FAILURE);
+        }
+        globals.capture.read(frame);
+        /*
+        if (frame.empty()) {
+            std::cerr << "device closed (or video at the end)" << "\n";
+            break;
+        }*/
+        cv::Point2f center_relative = find_center_HSV(frame);
+    }
+}
 
 void draw_cross(cv::Mat& img, int x, int y, int size)
 {
