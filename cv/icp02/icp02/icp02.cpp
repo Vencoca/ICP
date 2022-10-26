@@ -72,7 +72,7 @@ void img_process_code() {
         img_data_p = std::move(img_data_local);
         my_mutex.unlock();
         //simulate 10 FPS
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 
