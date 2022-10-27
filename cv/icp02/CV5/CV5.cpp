@@ -26,6 +26,8 @@ static void init_opengl(void);
 static void init_glfw(void);
 static void finalize(int code);
 
+void set_all_callbacks();
+
 void error_callback(int error, const char* description);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void fbsize_callback(GLFWwindow* window, int width, int height);
@@ -51,10 +53,16 @@ int main() {
     cv::Mat frame;
     globals.capture = cv::VideoCapture(cv::CAP_DSHOW);
     std::unique_ptr<img_data_s> img_data_local;
+
+    init_opengl();
+    set_all_callbacks();
+
     //cv::namedWindow("frame");
     bool new_data = false;
     std::thread img_thread(img_process_code);
-    while (globals.capture.isOpened()) {
+    while (!glfwWindowShouldClose(globals.window)) {
+
+        /*
         my_mutex.lock();
         if (img_data_p && !img_data_p->frame.empty()) {
             img_data_local = std::move(img_data_p);
@@ -71,19 +79,21 @@ int main() {
         }
         else {
             std::cout << ".";
-        }
-        cv::waitKey(16);
+        }*/
+
+
+        glfwPollEvents();
     }
     if (img_thread.joinable()) {
         img_thread.join();
     }
-
+    finalize(1);
     return(EXIT_SUCCESS);
 }
 
 void img_process_code() {
     cv::Mat frame;
-    while (globals.capture.isOpened()) {
+    while (!glfwWindowShouldClose(globals.window)) {
         globals.capture.read(frame);
         if (frame.empty()) {
             std::cerr << "device closed" << "\n";
@@ -274,4 +284,9 @@ static void finalize(int code)
     glfwTerminate();
 
     // ...
+}
+
+void set_all_callbacks() {
+    glfwSetErrorCallback(error_callback);
+    glfwSetFramebufferSizeCallback(globals.window,fbsize_callback);
 }
