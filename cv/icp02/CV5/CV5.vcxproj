@@ -143,6 +143,14 @@
   <ItemGroup>
     <ClCompile Include="CV5.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\basic.frag" />
+    <None Include="resources\basic.vert" />
+    <None Include="resources\basic_uni.frag" />
+    <None Include="resources\toon.frag" />
+    <None Include="resources\toon.vert" />
+    <None Include="resources\toon_uni.frag" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

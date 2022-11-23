@@ -3,6 +3,8 @@
 #include <chrono>
 #include <numeric>
 #include <thread>
+#include <fstream>
+#include <sstream>
 // ----------------------------------------- INCLUDE GRAPHIC ---------------------------------------------------
 #include <opencv2\opencv.hpp> // OpenCV
 #include <GL/glew.h> // OpenGL Extension Wrangler
@@ -15,27 +17,42 @@ static void init_glfw(void);
 static void finalize(int code);
 // ----------------------------------------- CALLBACKS DECLARE -------------------------------------------------
 void set_all_callbacks();
+void init_shaders();
 void error_callback(int error, const char* description);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void fbsize_callback(GLFWwindow* window, int width, int height);
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void*
+    userParam);
 // -------------------------------------------- STRUCTURES -----------------------------------------------------
 typedef struct s_globals {
     cv::VideoCapture capture;
     GLFWwindow* window;
     int width;
     int height;
+    int window_xpos;
+    int window_ypos;
+    int window_width;
+    int window_height;
     double mouse_xpos;
     double mouse_ypos;
     double app_start_time;
+    bool fullscreen;
 } s_globals;
 s_globals globals;
+
+GLuint shader_program;
 // ------------------------------------------------- MAIN -------------------------------------------------------
 int main() {
     init_opengl();
     set_all_callbacks();
+
+    init_shaders();
+
     while (!glfwWindowShouldClose(globals.window)) {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glfwSwapBuffers(globals.window);
         glfwPollEvents();
     }
     finalize(1);
@@ -48,6 +65,15 @@ void set_all_callbacks() {
     glfwSetKeyCallback(globals.window, key_callback);
     glfwSetCursorPosCallback(globals.window, cursor_position_callback);
     glfwSetMouseButtonCallback(globals.window, mouse_button_callback);
+
+    if (glfwExtensionSupported("GL_ARB_debug_output"))
+    {
+        glDebugMessageCallback(MessageCallback, 0);
+        //glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        std::cout << "GL_DEBUG enabled." << std::endl;
+    }
 }
 
 void error_callback(int error, const char* description)
@@ -75,6 +101,17 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         std::cout << "LEFT" << "\n";
     if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
         std::cout << "RIGHT" << "\n";
+    if (key == GLFW_KEY_F && action == GLFW_PRESS) {
+        
+        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode * mode = glfwGetVideoMode(monitor); 
+        if (globals.fullscreen) {
+            glfwSetWindowMonitor(window, nullptr, globals.window_xpos, globals.window_ypos, 800, 600, mode->refreshRate);
+        } else {
+            glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+        }
+        globals.fullscreen = !globals.fullscreen;
+    }
 }
 
 void fbsize_callback(GLFWwindow* window, int width, int height)
@@ -106,6 +143,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 static void init_opengl(void)
 {
     init_glfw();
+    glewInit();
 }
 
 static void init_glfw(void)
@@ -126,13 +164,16 @@ static void init_glfw(void)
     }
 
     // Shader based, modern OpenGL (3.3 and higher)
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // only new functions
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE); // only old functions (for old tutorials etc.)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // only new functions
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE); // only old functions (for old tutorials etc.)
 
     glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
     globals.window = glfwCreateWindow(800, 600, "OpenGL context", NULL, NULL);
+    globals.fullscreen = false;
+    globals.window_height = 800;
+    globals.window_width = 600;
     if (!globals.window)
     {
         std::cerr << "GLFW window creation error." << std::endl;
@@ -167,4 +208,110 @@ static void finalize(int code)
     glfwTerminate();
 
     // ...
+}
+//--------------------------------------------------  Errory ---------------------------------------------------------------------------
+void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void*
+    userParam)
+{
+    auto const src_str = [source]() {
+        switch (source)
+        {
+        case GL_DEBUG_SOURCE_API: return "API";
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM: return "WINDOW SYSTEM";
+        case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SHADER COMPILER";
+        case GL_DEBUG_SOURCE_THIRD_PARTY: return "THIRD PARTY";
+        case GL_DEBUG_SOURCE_APPLICATION: return "APPLICATION";
+        case GL_DEBUG_SOURCE_OTHER: return "OTHER";
+        default: return "Unknown";
+        }
+    }();
+    auto const type_str = [type]() {
+        switch (type)
+        {
+        case GL_DEBUG_TYPE_ERROR: return "ERROR";
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "DEPRECATED_BEHAVIOR";
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: return "UNDEFINED_BEHAVIOR";
+        case GL_DEBUG_TYPE_PORTABILITY: return "PORTABILITY";
+        case GL_DEBUG_TYPE_PERFORMANCE: return "PERFORMANCE";
+        case GL_DEBUG_TYPE_MARKER: return "MARKER";
+        case GL_DEBUG_TYPE_OTHER: return "OTHER";
+        default: return "Unknown";
+        }
+    }();
+    auto const severity_str = [severity]() {
+        switch (severity) {
+        case GL_DEBUG_SEVERITY_NOTIFICATION: return "NOTIFICATION";
+        case GL_DEBUG_SEVERITY_LOW: return "LOW";
+        case GL_DEBUG_SEVERITY_MEDIUM: return "MEDIUM";
+        case GL_DEBUG_SEVERITY_HIGH: return "HIGH";
+        default: return "Unknown";
+        }
+    }();
+    std::cout << "[GL CALLBACK]: " <<
+        "source = " << src_str <<
+        ", type = " << type_str <<
+        ", severity = " << severity_str <<
+        ", ID = '" << id << '\'' <<
+        ", message = '" << message << '\'' << std::endl;
+}
+
+//--------------------------------------------------  Shader Support ---------------------------------------------------------------------------
+std::string textFileRead(const std::string fn) {
+    std::ifstream file;
+    std::stringstream ss;
+    file.open(fn);
+    if (file.is_open()){
+        ss << file.rdbuf();
+    }
+    else {
+        std::cerr << "Error opening file: " << fn << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    return std::move(ss.str());
+}
+std::string getShaderInfoLog(const GLuint obj) {
+    int infologLength = 0;
+    std::string s;
+    glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &infologLength);
+    if (infologLength > 0) {
+        std::vector<char> v(infologLength);
+        glGetShaderInfoLog(obj, infologLength, NULL,
+            v.data());
+        s.assign(begin(v), end(v));
+    }
+    return s;
+}
+std::string getProgramInfoLog(const GLuint obj) {
+    int infologLength = 0;
+    std::string s;
+    glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &infologLength);
+    if (infologLength > 0) {
+        std::vector<char> v(infologLength);
+        glGetProgramInfoLog(obj, infologLength, NULL,
+            v.data());
+        s.assign(begin(v), end(v));
+    }
+    return s;
+}
+//--------------------------------------------------  Shader Init ---------------------------------------------------------------------------
+void init_shaders() {
+    GLuint VS_h, FS_h, prog_h;
+    VS_h = glCreateShader(GL_VERTEX_SHADER);
+    FS_h = glCreateShader(GL_FRAGMENT_SHADER);
+    std::string VSsrc = textFileRead("resources/basic.vert");
+    const char* VS_string = VSsrc.c_str();
+    std::string FSsrc = textFileRead("resources/basic.frag");
+    const char* FS_string = FSsrc.c_str();
+    glShaderSource(VS_h, 1, &VS_string, NULL);
+    glShaderSource(FS_h, 1, &FS_string, NULL);
+    glCompileShader(VS_h);
+    getShaderInfoLog(VS_h);
+    glCompileShader(FS_h);
+    getShaderInfoLog(FS_h);
+    prog_h = glCreateProgram();
+    glAttachShader(prog_h, VS_h);
+    glAttachShader(prog_h, FS_h);
+    glLinkProgram(prog_h);
+    getProgramInfoLog(prog_h);
+    glUseProgram(prog_h);
 }
