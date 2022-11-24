@@ -15,9 +15,13 @@
 static void init_opengl(void);
 static void init_glfw(void);
 static void finalize(int code);
+static void init_shaders();
 // ----------------------------------------- CALLBACKS DECLARE -------------------------------------------------
 void set_all_callbacks();
-void init_shaders();
+void use_openGL();
+std::string textFileRead(const std::string fn);
+std::string getProgramInfoLog(const GLuint obj);
+std::string getShaderInfoLog(const GLuint obj);
 void error_callback(int error, const char* description);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void fbsize_callback(GLFWwindow* window, int width, int height);
@@ -48,10 +52,123 @@ int main() {
     init_opengl();
     set_all_callbacks();
 
-    init_shaders();
+    //init_shaders();
+    GLuint VS_h, FS_h, prog_h;
+    VS_h = glCreateShader(GL_VERTEX_SHADER);
+    FS_h = glCreateShader(GL_FRAGMENT_SHADER);
+    std::string VSsrc = textFileRead("resources/basic.vert");
+    const char* VS_string = VSsrc.c_str();
+    std::string FSsrc = textFileRead("resources/basic.frag");
+    const char* FS_string = FSsrc.c_str();
+    glShaderSource(VS_h, 1, &VS_string, NULL);
+    glShaderSource(FS_h, 1, &FS_string, NULL);
+    glCompileShader(VS_h);
+    getShaderInfoLog(VS_h);
+    glCompileShader(FS_h);
+    getShaderInfoLog(FS_h);
+    prog_h = glCreateProgram();
+    glAttachShader(prog_h, VS_h);
+    glAttachShader(prog_h, FS_h);
+    glLinkProgram(prog_h);
+    getProgramInfoLog(prog_h);
+    glUseProgram(prog_h);
+    //use_openGL();
+    //existing data
+    struct vertex {
+        glm::vec3 position; // Vertex
+        glm::vec3 color; // Color
+    };
+    std::vector<vertex> vertices = {
+    { {-0.5f,-0.5f,0.0f}, {1.0f,0.0f,0.0f} },
+    { { 0.5f,-0.5f,0.0f}, {0.0f,1.0f,0.0f} },
+    { { 0.0f, 0.5f,0.0f}, {0.0f,0.0f,1.0f} } };
+    std::vector<GLuint> indices = { 0,1,2 };
+    //GL names for Array and Buffers Objects
+    GLuint VAO1;
+    {
+        GLuint VBO, EBO;
+        // Generate the VAO and VBO
+        glGenVertexArrays(1, &VAO1);
+        glGenBuffers(1, &VBO);
+        glGenBuffers(1, &EBO);
+        // Bind VAO (set as the current)
+        glBindVertexArray(VAO1);
+        // Bind the VBO, set type as GL_ARRAY_BUFFER
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        // Fill-in data into the VBO
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertex), vertices.data(), GL_STATIC_DRAW);
+        // Bind EBO, set type GL_ELEMENT_ARRAY_BUFFER
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        // Fill-in data into the EBO
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+        // Set Vertex Attribute to explain OpenGL how to interpret the VBO
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, position)));
+        // Enable the Vertex Attribute 0 = position
+        glEnableVertexAttribArray(0);
+        // Set end enable Vertex Attribute 1 = Texture Coordinates
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, color)));
+        glEnableVertexAttribArray(1);
+        // Bind VBO and VAO to 0 to prevent unintended modification
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+    //------------------------------------------
+    // Vygenerujte kolečko uprostřed obrazovky z 100 000 vertexů
+    std::vector<vertex> vertices2 = {
+    { {-0.5f,-0.5f,0.0f}, {1.0f,0.0f,0.0f} },
+    { { 0.5f,-0.5f,0.0f}, {0.0f,1.0f,0.0f} },
+    { { 0.0f, 0.5f,0.0f}, {0.0f,0.0f,1.0f} } };
+    std::vector<GLuint> indices2 = { 0,1,2 };
+    //GL names for Array and Buffers Objects
+    GLuint VAO2;
+    {
+        GLuint VBO, EBO;
+        // Generate the VAO and VBO
+        glGenVertexArrays(1, &VAO1);
+        glGenBuffers(1, &VBO);
+        glGenBuffers(1, &EBO);
+        // Bind VAO (set as the current)
+        glBindVertexArray(VAO1);
+        // Bind the VBO, set type as GL_ARRAY_BUFFER
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        // Fill-in data into the VBO
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertex), vertices.data(), GL_STATIC_DRAW);
+        // Bind EBO, set type GL_ELEMENT_ARRAY_BUFFER
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        // Fill-in data into the EBO
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+        // Set Vertex Attribute to explain OpenGL how to interpret the VBO
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, position)));
+        // Enable the Vertex Attribute 0 = position
+        glEnableVertexAttribArray(0);
+        // Set end enable Vertex Attribute 1 = Texture Coordinates
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, color)));
+        glEnableVertexAttribArray(1);
+        // Bind VBO and VAO to 0 to prevent unintended modification
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
 
     while (!glfwWindowShouldClose(globals.window)) {
         glClear(GL_COLOR_BUFFER_BIT);
+
+        //trojúhelník
+        {
+            glUseProgram(prog_h);
+            glBindVertexArray(VAO1);
+            glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        }
+
+        //kolecko
+        {
+            glUseProgram(prog2_h); //nemá barvy <- nutno vytvořit
+            glBindVertexArray(VAO2);
+            glDrawElements(GL_TRIANGLE_FAN, indices.size(), GL_UNSIGNED_INT, 0);
+        }
+
         glfwSwapBuffers(globals.window);
         glfwPollEvents();
     }
@@ -314,4 +431,50 @@ void init_shaders() {
     glLinkProgram(prog_h);
     getProgramInfoLog(prog_h);
     glUseProgram(prog_h);
+}
+
+//--------------------------------------------------  Compute Init ---------------------------------------------------------------------------
+
+void use_openGL() {
+    //existing data
+    struct vertex {
+        glm::vec3 position; // Vertex
+        glm::vec3 color; // Color
+    };
+    std::vector<vertex> vertices = {
+    { {-0.5f,-0.5f,0.0f}, {1.0f,0.0f,0.0f} },
+    { { 0.5f,-0.5f,0.0f}, {0.0f,1.0f,0.0f} },
+    { { 0.0f, 0.5f,0.0f}, {0.0f,0.0f,1.0f} } };
+    std::vector<GLuint> indices = { 0,1,2 };
+    //GL names for Array and Buffers Objects
+    GLuint VAO1; 
+    {
+        GLuint VBO, EBO;
+        // Generate the VAO and VBO
+        glGenVertexArrays(1, &VAO1);
+        glGenBuffers(1, &VBO);
+        glGenBuffers(1, &EBO);
+        // Bind VAO (set as the current)
+        glBindVertexArray(VAO1);
+        // Bind the VBO, set type as GL_ARRAY_BUFFER
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        // Fill-in data into the VBO
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertex),vertices.data(), GL_STATIC_DRAW);
+        // Bind EBO, set type GL_ELEMENT_ARRAY_BUFFER
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        // Fill-in data into the EBO
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint),indices.data(), GL_STATIC_DRAW);
+        // Set Vertex Attribute to explain OpenGL how to interpret the VBO
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex),(void*)(0 + offsetof(vertex, position)));
+        // Enable the Vertex Attribute 0 = position
+        glEnableVertexAttribArray(0);
+        // Set end enable Vertex Attribute 1 = Texture Coordinates
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex),(void*)(0 + offsetof(vertex, color)));
+        glEnableVertexAttribArray(1);
+        // Bind VBO and VAO to 0 to prevent unintended modification
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+    
 }
