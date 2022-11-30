@@ -5,6 +5,8 @@
 #include <thread>
 #include <fstream>
 #include <sstream>
+#include <math.h>
+#define _USE_MATH_DEFINES
 // ----------------------------------------- INCLUDE GRAPHIC ---------------------------------------------------
 #include <opencv2\opencv.hpp> // OpenCV
 #include <GL/glew.h> // OpenGL Extension Wrangler
@@ -71,7 +73,27 @@ int main() {
     glAttachShader(prog_h, FS_h);
     glLinkProgram(prog_h);
     getProgramInfoLog(prog_h);
-    glUseProgram(prog_h);
+
+    GLuint VS_h2, FS_h2, prog2_h;
+    VS_h2 = glCreateShader(GL_VERTEX_SHADER);
+    FS_h2 = glCreateShader(GL_FRAGMENT_SHADER);
+    std::string VSsrc2 = textFileRead("resources/basic2.vert");
+    const char* VS_string2 = VSsrc.c_str();
+    std::string FSsrc2 = textFileRead("resources/basic2.frag");
+    const char* FS_string2 = FSsrc2.c_str();
+    glShaderSource(VS_h2, 1, &VS_string2, NULL);
+    glShaderSource(FS_h2, 1, &FS_string2, NULL);
+    glCompileShader(VS_h2);
+    getShaderInfoLog(VS_h2);
+    glCompileShader(FS_h2);
+    getShaderInfoLog(FS_h2);
+    prog2_h = glCreateProgram();
+    glAttachShader(prog2_h, VS_h2);
+    glAttachShader(prog2_h, FS_h2);
+    glLinkProgram(prog2_h);
+    getProgramInfoLog(prog2_h);
+
+
     //use_openGL();
     //existing data
     struct vertex {
@@ -116,28 +138,46 @@ int main() {
     //------------------------------------------
     // Vygenerujte kolečko uprostřed obrazovky z 100 000 vertexů
     std::vector<vertex> vertices2 = {
-    { {-0.5f,-0.5f,0.0f}, {1.0f,0.0f,0.0f} },
-    { { 0.5f,-0.5f,0.0f}, {0.0f,1.0f,0.0f} },
-    { { 0.0f, 0.5f,0.0f}, {0.0f,0.0f,1.0f} } };
-    std::vector<GLuint> indices2 = { 0,1,2 };
+    { {0.0f,0.0f,0.0f}, {1.0f,0.0f,0.0f} }, 
+    };
+    std::vector<GLuint> indices2 = { 0 };
+    
+    int n = 255;
+    float r = 0.45f;
+    for (size_t i = 1; i <= n; i++)
+    {
+        float x = cos(2 * M_PI / n * i) * r;
+        float y = sin(2 * M_PI / n * i) * r;
+        vertex vert = { {x,y,0.0f}, {1.0f,0.0f,0.0f} };
+        vertices2.push_back(vert);
+        indices2.push_back(i);
+    };
+    float x = cos(2 * M_PI / n * 1) * r;
+    float y = sin(2 * M_PI / n * 1) * r;
+    vertex vert = { {x,y,0.0f}, {1.0f,0.0f,0.0f} };
+    vertices2.push_back(vert);
+    indices2.push_back(n + 1);
+    indices2.push_back(n + 2);
+    indices2.push_back(n+3);
     //GL names for Array and Buffers Objects
+
     GLuint VAO2;
     {
         GLuint VBO, EBO;
         // Generate the VAO and VBO
-        glGenVertexArrays(1, &VAO1);
+        glGenVertexArrays(1, &VAO2);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
         // Bind VAO (set as the current)
-        glBindVertexArray(VAO1);
+        glBindVertexArray(VAO2);
         // Bind the VBO, set type as GL_ARRAY_BUFFER
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         // Fill-in data into the VBO
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertex), vertices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices2.size() * sizeof(vertex), vertices2.data(), GL_STATIC_DRAW);
         // Bind EBO, set type GL_ELEMENT_ARRAY_BUFFER
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         // Fill-in data into the EBO
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices2.size() * sizeof(GLuint), indices2.data(), GL_STATIC_DRAW);
         // Set Vertex Attribute to explain OpenGL how to interpret the VBO
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, position)));
         // Enable the Vertex Attribute 0 = position
@@ -166,7 +206,7 @@ int main() {
         {
             glUseProgram(prog2_h); //nemá barvy <- nutno vytvořit
             glBindVertexArray(VAO2);
-            glDrawElements(GL_TRIANGLE_FAN, indices.size(), GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLE_FAN, indices2.size(), GL_UNSIGNED_INT, 0);
         }
 
         glfwSwapBuffers(globals.window);

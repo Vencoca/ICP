@@ -38,5 +38,11 @@
     <None Include="resources\toon_uni.frag">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\basic2.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\basic2.frag">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
