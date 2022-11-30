@@ -142,7 +142,7 @@ int main() {
     };
     std::vector<GLuint> indices2 = { 0 };
     
-    int n = 255;
+    int n = 30;
     float r = 0.45f;
     for (size_t i = 1; i <= n; i++)
     {
@@ -192,6 +192,8 @@ int main() {
     }
 
 
+    int frame_cnt = 0;
+    double last_fps = glfwGetTime();
     while (!glfwWindowShouldClose(globals.window)) {
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -207,10 +209,21 @@ int main() {
             glUseProgram(prog2_h); //nemá barvy <- nutno vytvořit
             glBindVertexArray(VAO2);
             glDrawElements(GL_TRIANGLE_FAN, indices2.size(), GL_UNSIGNED_INT, 0);
-        }
+        } 
 
+        glfwSwapInterval(0);
         glfwSwapBuffers(globals.window);
         glfwPollEvents();
+
+        frame_cnt += 1;
+        double now = glfwGetTime();
+        if (now - last_fps > 1.0) {
+            std::cout << frame_cnt << "FPS\r";
+            frame_cnt = 0;
+            last_fps = now;
+        }
+
+
     }
     finalize(1);
     return(EXIT_SUCCESS);
