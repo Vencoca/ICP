@@ -13,6 +13,7 @@
 #include <GL/wglew.h> //WGLEW = Windows GL Extension Wrangler (change for different platform) 
 #include <GLFW/glfw3.h> // GLFW toolkit
 #include <glm/glm.hpp> // OpenGL math
+#include <glm/ext.hpp> 
 // ------------------------------------------- INIT DECLARE ----------------------------------------------------
 static void init_opengl(void);
 static void init_glfw(void);
@@ -48,6 +49,7 @@ typedef struct s_globals {
 } s_globals;
 s_globals globals;
 
+glm::vec4 color(1,0,0,1);
 GLuint shader_program;
 // ------------------------------------------------- MAIN -------------------------------------------------------
 int main() {
@@ -207,11 +209,13 @@ int main() {
         //kolecko
         {
             glUseProgram(prog2_h); //nemá barvy <- nutno vytvořit
+            GLuint loc = glGetUniformLocation(prog2_h, "barva");
+            //glUniform4f(loc, 1, 0, 0, 1);
+            glUniform4fv(loc, 1, glm::value_ptr(color));
             glBindVertexArray(VAO2);
             glDrawElements(GL_TRIANGLE_FAN, indices2.size(), GL_UNSIGNED_INT, 0);
         } 
 
-        glfwSwapInterval(0);
         glfwSwapBuffers(globals.window);
         glfwPollEvents();
 
@@ -263,6 +267,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         std::cout << "S" << "\n";
     if (key == GLFW_KEY_D && action == GLFW_PRESS)
         std::cout << "D" << "\n";
+    if (key == GLFW_KEY_R && action == GLFW_PRESS){
+        std::cout << "R" << "\n";
+        color = glm::vec4(1, 0, 0, 1);
+    }
+    if (key == GLFW_KEY_G && action == GLFW_PRESS){
+        std::cout << "G" << "\n";
+        color = glm::vec4(0, 1, 0, 1);
+    }
+    if (key == GLFW_KEY_B && action == GLFW_PRESS){
+        std::cout << "B" << "\n";
+        color = glm::vec4(0, 0, 1, 1);
+    }
     if (key == GLFW_KEY_UP && action == GLFW_PRESS)
         std::cout << "UP" << "\n";
     if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
@@ -361,8 +377,8 @@ static void init_glfw(void)
 
     glfwMakeContextCurrent(globals.window);										// Set current window.
     glfwGetFramebufferSize(globals.window, &globals.width, &globals.height);	// Get window size.
-    //glfwSwapInterval(0);														// Set V-Sync OFF.
-    glfwSwapInterval(1);														// Set V-Sync ON.
+    glfwSwapInterval(0);														// Set V-Sync OFF.
+    //glfwSwapInterval(1);														// Set V-Sync ON.
 
 
     globals.app_start_time = glfwGetTime();										// Get start time.
