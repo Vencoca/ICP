@@ -156,10 +156,10 @@
     <ClInclude Include="verticies.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\ICP\cv\icp02\CV5\resources\basic.frag" />
-    <None Include="..\..\ICP\cv\icp02\CV5\resources\basic.vert" />
-    <None Include="..\..\ICP\cv\icp02\CV5\resources\basic2.frag" />
-    <None Include="..\..\ICP\cv\icp02\CV5\resources\basic2.vert" />
+    <None Include="resources\basic.frag" />
+    <None Include="resources\basic.vert" />
+    <None Include="resources\basic2.frag" />
+    <None Include="resources\basic2.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

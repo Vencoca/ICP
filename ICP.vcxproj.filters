@@ -52,16 +52,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\ICP\cv\icp02\CV5\resources\basic.frag">
+    <None Include="resources\basic.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\..\ICP\cv\icp02\CV5\resources\basic.vert">
+    <None Include="resources\basic.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\..\ICP\cv\icp02\CV5\resources\basic2.frag">
+    <None Include="resources\basic2.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\..\ICP\cv\icp02\CV5\resources\basic2.vert">
+    <None Include="resources\basic2.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
