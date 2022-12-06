@@ -1,3 +1,4 @@
 ﻿  ICP.cpp
-C:\Users\vacla\Documents\Github\ICP\ICP.cpp(90,80): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\vacla\Documents\Github\ICP\ICP.cpp(98,80): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\vacla\Documents\Github\ICP\ICP.cpp(119,89): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   ICP.vcxproj -> C:\Users\vacla\Documents\Github\ICP\x64\Debug\ICP.exe

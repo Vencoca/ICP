@@ -64,5 +64,11 @@
     <None Include="resources\basic2.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\basic_checker.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\basic_checker.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

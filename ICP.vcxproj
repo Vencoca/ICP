@@ -160,6 +160,8 @@
     <None Include="resources\basic.vert" />
     <None Include="resources\basic2.frag" />
     <None Include="resources\basic2.vert" />
+    <None Include="resources\basic_checker.frag" />
+    <None Include="resources\basic_checker.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

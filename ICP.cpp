@@ -23,6 +23,12 @@ int main() {
     GLuint VAO_two;
     std::vector<GLuint> indices_two;
     make_circle(&VAO_two, &indices_two);
+    //--------------------------- Checker Object -----------------------------
+    GLuint shader_checker;
+    make_shader("resources/basic_checker.vert", "resources/basic_checker.frag", &shader_checker);
+    GLuint VAO_checker;
+    std::vector<GLuint> indices_checker;
+    make_checker(&VAO_checker, &indices_checker,8,8);
     //-----------------------------------------------------------------------
     int frame_cnt = 0;
     double last_fps = glfwGetTime();
@@ -44,7 +50,8 @@ int main() {
 
     //set uniform for shaders - projection matrix
     glUniformMatrix4fv(glGetUniformLocation(shader_one, "uProj_m"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
-
+    glUseProgram(shader_checker);
+    glUniformMatrix4fv(glGetUniformLocation(shader_checker, "uProj_m"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     // set visible area
     glViewport(0, 0, width, height);
 
@@ -60,6 +67,7 @@ int main() {
             glDrawElements(GL_TRIANGLE_FAN, indices_two.size(), GL_UNSIGNED_INT, 0);
         }
         */
+        
         { //Triangle
             glUseProgram(shader_one);
 
@@ -88,6 +96,28 @@ int main() {
 
             glBindVertexArray(VAO_one);
             glDrawElements(GL_TRIANGLES, indices_one.size(), GL_UNSIGNED_INT, 0);
+        }
+        
+        {
+            glUseProgram(shader_checker);
+            // View matrix
+            glm::mat4 v_m = glm::lookAt(glm::vec3(0.0f, 0.0f, 10.0f), //position of camera
+                glm::vec3(0.0f, 0.0f, 0.0f), //where to look
+                glm::vec3(0, 1, 0)  //UP direction
+            );
+            glUniformMatrix4fv(glGetUniformLocation(shader_checker, "uV_m"), 1, GL_FALSE, glm::value_ptr(v_m));
+            // Model Matrix
+            glm::mat4 m_m = glm::identity<glm::mat4>();
+            //m_m = glm::translate(m_m, glm::vec3(width / 2.0, height / 2.0, 0.0));
+            m_m = glm::scale(m_m, glm::vec3(5.0f));
+            m_m = glm::rotate(m_m, glm::radians(100.0f * (float)glfwGetTime()), glm::vec3(0.01f, 0.3f, 0.2f));
+            glUniformMatrix4fv(glGetUniformLocation(shader_checker, "uMV_m"), 1, GL_FALSE, glm::value_ptr(m_m));
+            // =====================================================================================================
+            // modify Model matrix and send to shaders
+            // rotate slowly
+            glBindVertexArray(VAO_checker);
+            glDrawElements(GL_TRIANGLE_STRIP, indices_checker.size(), GL_UNSIGNED_INT, 0);
+
         }
         glfwSwapBuffers(globals.window);
         glfwPollEvents();
