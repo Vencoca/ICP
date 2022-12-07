@@ -142,15 +142,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="ICP.cpp" />
     <ClCompile Include="init.cpp" />
+    <ClCompile Include="mesh.cpp" />
     <ClCompile Include="shaders.cpp" />
     <ClCompile Include="verticies.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.h" />
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="camera2.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="init.h" />
+    <ClInclude Include="mesh.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="vertex.h" />
     <ClInclude Include="verticies.h" />

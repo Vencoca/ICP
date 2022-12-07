@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include "callbacks.h"
 #include "globals.h"
+#include "camera.h"
 
 void set_all_callbacks();
 void error_callback(int error, const char* description);

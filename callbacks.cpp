@@ -1,7 +1,7 @@
 #include "callbacks.h"
 
 extern s_globals globals;
-
+extern Camera camera;
 
 void set_all_callbacks() {
     glfwSetErrorCallback(error_callback);
@@ -29,17 +29,25 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
-    if (key == GLFW_KEY_W && action == GLFW_PRESS)
+    if (key == GLFW_KEY_W && action == GLFW_PRESS){
+        camera.Move_with_camera(Camera::direction::FORWARD);
         std::cout << "W" << "\n";
-    if (key == GLFW_KEY_A && action == GLFW_PRESS)
+    }
+    if (key == GLFW_KEY_A && action == GLFW_PRESS){
+        camera.Rotate(true);
         std::cout << "A" << "\n";
-    if (key == GLFW_KEY_S && action == GLFW_PRESS)
+    }
+    if (key == GLFW_KEY_S && action == GLFW_PRESS){
+        camera.Move_with_camera(Camera::direction::BACKWARD);
         std::cout << "S" << "\n";
-    if (key == GLFW_KEY_D && action == GLFW_PRESS)
+    }
+    if (key == GLFW_KEY_D && action == GLFW_PRESS){
+        camera.Rotate(false);
         std::cout << "D" << "\n";
+    }
     if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+        camera.Reset();
         std::cout << "R" << "\n";
-        globals.color = glm::vec4(1, 0, 0, 1);
     }
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
         std::cout << "G" << "\n";
@@ -49,14 +57,22 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         std::cout << "B" << "\n";
         globals.color = glm::vec4(0, 0, 1, 1);
     }
-    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+    if (key == GLFW_KEY_UP && action == GLFW_PRESS){
+        camera.Move(Camera::direction::FORWARD);
         std::cout << "UP" << "\n";
-    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+    }
+    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
+        camera.Move(Camera::direction::BACKWARD);
         std::cout << "DOWN" << "\n";
-    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+    }
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
+        camera.Move(Camera::direction::LEFT);
         std::cout << "LEFT" << "\n";
-    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+    }
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
+        camera.Move(Camera::direction::RIGHT);
         std::cout << "RIGHT" << "\n";
+    }
     if (key == GLFW_KEY_F && action == GLFW_PRESS) {
 
         GLFWmonitor* monitor = glfwGetPrimaryMonitor();
