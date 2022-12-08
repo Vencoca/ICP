@@ -2,8 +2,8 @@
 
 Camera::Camera()
 {
-    this->position = glm::vec3(0.0f, 1.0f, 10.0f);
-    this->point_of_sight = glm::vec3(0.0f, 1.0f - 0.01746f, 0.0f);
+    this->position = glm::vec3(0.0f, 5.0f, 10.0f);
+    this->point_of_sight = glm::vec3(0.0f, 5.0f - glm::radians(1.0f), 0.0f);
     this->up_direction = glm::vec3(0, 1, 0);
 
     glm::vec3 camera_range = this->point_of_sight - this->position;
@@ -14,8 +14,8 @@ Camera::Camera()
 }
 
 void Camera::Reset() {
-    this->position = glm::vec3(0.0f, 1.0f, 10.0f);
-    this->point_of_sight = glm::vec3(0.0f, 1.0f - 0.01746f, 0.0f);
+    this->position = glm::vec3(0.0f, 5.0f, 10.0f);
+    this->point_of_sight = glm::vec3(0.0f, 5.0f - glm::radians(1.0f), 0.0f);
     this->up_direction = glm::vec3(0, 1, 0);
     glm::vec3 camera_range = this->point_of_sight - this->position;
     double a = camera_range[0];

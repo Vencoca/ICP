@@ -22,7 +22,7 @@ int main() {
     make_shader("resources/basic.vert", "resources/basic.frag", &shader_mesh);
 
     make_triangle(&indices_mesh, &vertex_mesh);
-    mesh_p_c mesh_triangle = mesh_p_c(shader_mesh, vertex_mesh, indices_mesh);
+    mesh_p_c mesh_triangle = mesh_p_c(shader_mesh, vertex_mesh, indices_mesh,GL_TRIANGLES);
 
     make_checker(&indices_mesh, &vertex_mesh, 32, 32);
     mesh_p_c mesh_checker = mesh_p_c(shader_mesh, vertex_mesh, indices_mesh,GL_TRIANGLE_STRIP);
@@ -58,8 +58,8 @@ int main() {
             glm::mat4 m_m2 = glm::identity<glm::mat4>();
 
             m_m = glm::scale(m_m, glm::vec3(5.0f));
-            m_m = glm::translate(m_m, glm::vec3(0.0f, 1.0f, 0.0f));
-            m_m = glm::rotate(m_m, glm::radians(100.0f * (float)glfwGetTime()), glm::vec3(0.2f, 0.1f, 0.3f));
+            m_m = glm::translate(m_m, glm::vec3(0.0f, 0.25f, 0.0f));
+            m_m = glm::rotate(m_m, glm::radians(100.0f * (float)glfwGetTime()), glm::vec3(0.0f, 0.1f, 0.0f));
 
             mesh_triangle.draw(m_m, v_m, projectionMatrix);
             m_m2 = glm::scale(m_m2, glm::vec3(10.0f));

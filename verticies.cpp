@@ -3,10 +3,15 @@
 
 void make_triangle(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex_ptr) {
     std::vector<vertex> vertices = {
-        { {-0.5f,-0.5f,0.0f}, {1.0f,0.0f,0.0f} },
-        { { 0.5f,-0.5f,0.0f}, {0.0f,1.0f,0.0f} },
-        { { 0.0f, 0.5f,0.0f}, {0.0f,0.0f,1.0f} } };
-    std::vector<GLuint> indices = { 0,1,2 };
+        { { 0.0f, 0.5f, 0.0f}, {1.0f,0.0f,0.0f} }, //vrchol
+        { { -0.5f, 0.0f, 0.5f}, {0.0f,1.0f,0.0f} }, //1.spodek
+        { { -0.5f, 0.0f, -0.5f}, {0.0f,0.0f,1.0f} }, //2.vrchol
+        { { 0.5f, 0.0f, -0.5f}, {1.0f,0.0f,1.0f} },
+        { { 0.5f, 0.0f, 0.5f}, {1.0f,1.0f,0.0f} }
+        };
+    //std::vector<GLuint> indices = { 0,1,2,3,0,2 };
+    //std::vector<GLuint> indices = { 0,3,2,3,1,3,4,3,0 };
+    std::vector<GLuint> indices = { 0,2,1,  0,1,4,  0,4,3, 0,3,2};
     *indices_ptr = indices;
     *vertex_ptr = vertices;
 }
