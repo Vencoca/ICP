@@ -4,6 +4,7 @@
 #include <glm/glm.hpp> 
 #include <glm/gtc/type_ptr.hpp>
 #include <opencv2\opencv.hpp>
+#include "globals.h"
 
 class Camera
 {
@@ -19,6 +20,9 @@ public:
     GLfloat Pitch = 0.0f;;
     GLfloat Roll = 0.0f;
 
+    GLfloat MovementSpeed = 0.1f;
+    GLfloat MouseSensitivity = 0.25f;
+
     enum class direction {
         FORWARD,
         BACKWARD,
@@ -32,3 +36,5 @@ public:
     void Move(Camera::direction direction);
     void Move_with_camera(Camera::direction direction);
 };
+
+void updateInput(GLFWwindow* window);

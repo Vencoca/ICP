@@ -44,16 +44,11 @@ int main() {
 
     while (!glfwWindowShouldClose(globals.window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glfwPollEvents();
+        updateInput(globals.window);
         { 
-            // View matrix
-            /*
-            glm::mat4 v_m = glm::lookAt(glm::vec3(0.0f, 0.0f, 10.0f), //position of camera
-                glm::vec3(0.0f, 0.0f, 0.0f), //where to look
-                glm::vec3(0, 1, 0)  //UP direction
-            );*/
 
             glm::mat4 v_m = glm::lookAt(camera.position, camera.point_of_sight, camera.up_direction);
-            // Model Matrix
             glm::mat4 m_m = glm::identity<glm::mat4>();
             glm::mat4 m_m2 = glm::identity<glm::mat4>();
 
@@ -67,7 +62,6 @@ int main() {
             mesh_checker.draw(m_m2, v_m, projectionMatrix);
         }
         glfwSwapBuffers(globals.window);
-        glfwPollEvents();
         frame_cnt += 1;
         double now = glfwGetTime();
         if (now - last_fps > 1.0) {

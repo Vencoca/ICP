@@ -14,5 +14,6 @@ struct s_globals {
     double mouse_ypos;
     double app_start_time;
     bool fullscreen;
+    double last_update;
     glm::vec4 color;
 };
