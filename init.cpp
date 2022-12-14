@@ -32,6 +32,7 @@ void init_glfw(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // only new functions
     //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE); // only old functions (for old tutorials etc.)
+   
 
     glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
     globals.window = glfwCreateWindow(800, 600, "OpenGL context", NULL, NULL);
@@ -52,7 +53,7 @@ void init_glfw(void)
         std::cout << "Running GLFW " << major << '.' << minor << '.' << revision << std::endl;
         std::cout << "Compiled against GLFW " << GLFW_VERSION_MAJOR << '.' << GLFW_VERSION_MINOR << '.' << GLFW_VERSION_REVISION << std::endl;
     }
-
+    glfwSetInputMode(globals.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwMakeContextCurrent(globals.window);										// Set current window.
     glfwGetFramebufferSize(globals.window, &globals.width, &globals.height);	// Get window size.
     glfwSwapInterval(0);														// Set V-Sync OFF.

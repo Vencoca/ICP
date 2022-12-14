@@ -63,8 +63,9 @@ void fbsize_callback(GLFWwindow* window, int width, int height)
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
+    camera.ProcessMouseMovement(- globals.mouse_xpos + xpos,  globals.mouse_ypos - ypos);
     globals.mouse_xpos = xpos;
-    globals.mouse_ypos = ypos;
+    globals.mouse_ypos = ypos; 
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {

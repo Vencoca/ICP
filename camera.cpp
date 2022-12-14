@@ -10,15 +10,12 @@ Camera::Camera()
 
 void Camera::Reset() {
     this->position = glm::vec3(0.0f, 1.5f, 10.0f);
-    this->point_of_sight = glm::vec3(0.0f, 1.5f - glm::radians(3.0f), 0.0f);
-    this->up_direction = glm::vec3(0, 1, 0);
-    glm::vec3 camera_range = this->point_of_sight - this->position;
-    double a = camera_range[0];
-    double b = camera_range[2];
-    this->range = sqrt(a * a + b * b);
-    this->Yaw = asin(b / this->range);
+    //this->point_of_sight = glm::vec3(0.0f, 1.5f - glm::radians(3.0f), 0.0f);
+    //this->up_direction = glm::vec3(0, 1, 0);
+    this->Yaw = -90.0f;
     this->Roll = 0.0f;
     this->Pitch = 0.0f;
+    this->updateCameraVectors();
 }
 
 void Camera::Rotate(bool left) {
@@ -57,23 +54,31 @@ void Camera::Move(Camera::direction direction) {
 }
 
 void Camera::Move_with_camera(Camera::direction direction) {
-    glm::vec3 camera_range = this->point_of_sight - this->position;
-    glm::vec3 dir = glm::normalize(camera_range)*this->MovementSpeed;
+    this->Front = this->point_of_sight - this->position;
+    //Lita za kurzorem
+    //glm::vec3 dir = glm::normalize(this->Front)*this->MovementSpeed;
+    glm::vec3 lrdir = glm::normalize(this->Right) * this->MovementSpeed;
+    //Chodi po plose
+    glm::vec3 dir = -glm::normalize(glm::cross(this->Right, glm::vec3(0.0f, 1.0f, 0.0f)))*this->MovementSpeed; 
 
     switch (direction)
     {
     case direction::FORWARD:
         this->position = this->position + dir;
-        this->point_of_sight = this->position + camera_range;
+        this->point_of_sight = this->position + this->Front;
         return;
     case direction::BACKWARD:
         this->position = this->position - dir;
-        this->point_of_sight = this->position + camera_range;
+        this->point_of_sight = this->position + this->Front;
         return;
     case direction::LEFT:
-        break;
+        this->position = this->position - lrdir;
+        this->point_of_sight = this->point_of_sight - lrdir;
+        return;
     case direction::RIGHT:
-        break;
+        this->position = this->position + lrdir;
+        this->point_of_sight = this->point_of_sight + lrdir;
+        return;
     }
 }
 
@@ -85,13 +90,13 @@ void updateInput(GLFWwindow* window) {
             camera.Move_with_camera(Camera::direction::FORWARD);
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            camera.Rotate(true);
+            camera.Move_with_camera(Camera::direction::LEFT);
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             camera.Move_with_camera(Camera::direction::BACKWARD);
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            camera.Rotate(false);
+            camera.Move_with_camera(Camera::direction::RIGHT);
         }
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             camera.Move(Camera::direction::FORWARD);
@@ -106,4 +111,36 @@ void updateInput(GLFWwindow* window) {
             camera.Move(Camera::direction::RIGHT);
         }
     }
+}
+
+
+void Camera::updateCameraVectors(){
+    glm::vec3 front;
+    front.x = cos(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
+    front.y = sin(glm::radians(this->Pitch));
+    front.z = sin(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
+
+    this->Front = glm::normalize(front);
+    this->Right = glm::normalize(glm::cross(this->Front, glm::vec3(0.0f, 1.0f, 0.0f)));
+    this->up_direction = glm::normalize(glm::cross(this->Right, this->Front));
+    this->point_of_sight = this->position + this->Front;
+}
+
+void Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constraintPitch)
+{
+    xoffset *= this->MouseSensitivity;
+    yoffset *= this->MouseSensitivity;
+
+    this->Yaw += xoffset;
+    this->Pitch += yoffset;
+
+    if (constraintPitch)
+    {
+        if (this->Pitch > 89.0f)
+            this->Pitch = 89.0f;
+        if (this->Pitch < -89.0f)
+            this->Pitch = -89.0f;
+    }
+
+    this->updateCameraVectors();
 }

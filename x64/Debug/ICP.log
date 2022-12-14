@@ -1,10 +1,2 @@
-﻿  callbacks.cpp
-  camera.cpp
-C:\Users\vacla\Documents\Github\ICP\camera.cpp(18,23): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\vacla\Documents\Github\ICP\camera.cpp(19,21): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-  ICP.cpp
-C:\Users\vacla\Documents\Github\ICP\mesh.h(36,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\vacla\Documents\Github\ICP\mesh.h(59,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  init.cpp
-  Generating Code...
+﻿  camera.cpp
   ICP.vcxproj -> C:\Users\vacla\Documents\Github\ICP\x64\Debug\ICP.exe
