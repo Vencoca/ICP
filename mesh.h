@@ -22,7 +22,9 @@ public:
     GLuint VAO;
     GLenum primitive;
     GLuint shader_id;
+    glm::mat4 model_matrix;
 
+    mesh_p_c();
     mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint& VAO, GLuint primitive);
     mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive = GL_TRIANGLES);
 
@@ -35,6 +37,26 @@ public:
         glBindVertexArray(VAO);
         glDrawElements(primitive, indices.size(), GL_UNSIGNED_INT, 0);
     }
+
+    void draw(const glm::mat4& V, const glm::mat4& P) {
+        glUseProgram(shader_id);
+        glUniformMatrix4fv(glGetUniformLocation(shader_id, "uP_m"), 1, GL_FALSE, glm::value_ptr(P));
+        glUniformMatrix4fv(glGetUniformLocation(shader_id, "uV_m"), 1, GL_FALSE, glm::value_ptr(V));
+        glUniformMatrix4fv(glGetUniformLocation(shader_id, "uM_m"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+
+        glBindVertexArray(VAO);
+        glDrawElements(primitive, indices.size(), GL_UNSIGNED_INT, 0);
+    }
+
+    void rotate(glm::f32 angle, glm::vec3 axis) {
+        model_matrix = glm::rotate(model_matrix, angle, axis);
+    };
+    void translate(glm::vec3 vector) {
+        model_matrix = glm::translate(model_matrix, vector);
+    };
+    void scale(glm::vec3 vector) {
+        model_matrix = glm::scale(model_matrix, vector);
+    };
 };
 
 class mesh_p_m {

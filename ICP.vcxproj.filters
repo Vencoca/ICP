@@ -36,6 +36,9 @@
     <ClCompile Include="camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OBJloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.h">
@@ -65,24 +68,15 @@
     <ClInclude Include="camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OBJloader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\basic.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="resources\basic.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\basic2.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\basic2.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\basic_checker.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\basic_checker.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

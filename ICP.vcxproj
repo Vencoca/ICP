@@ -146,6 +146,7 @@
     <ClCompile Include="ICP.cpp" />
     <ClCompile Include="init.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="OBJloader.cpp" />
     <ClCompile Include="shaders.cpp" />
     <ClCompile Include="verticies.cpp" />
   </ItemGroup>
@@ -156,6 +157,7 @@
     <ClInclude Include="globals.h" />
     <ClInclude Include="init.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="OBJloader.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="vertex.h" />
     <ClInclude Include="verticies.h" />
@@ -163,10 +165,6 @@
   <ItemGroup>
     <None Include="resources\basic.frag" />
     <None Include="resources\basic.vert" />
-    <None Include="resources\basic2.frag" />
-    <None Include="resources\basic2.vert" />
-    <None Include="resources\basic_checker.frag" />
-    <None Include="resources\basic_checker.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,2 +1,5 @@
-﻿  camera.cpp
+﻿  ICP.cpp
+C:\Users\vacla\Documents\Github\ICP\mesh.h(38,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\vacla\Documents\Github\ICP\mesh.h(48,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\vacla\Documents\Github\ICP\mesh.h(81,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   ICP.vcxproj -> C:\Users\vacla\Documents\Github\ICP\x64\Debug\ICP.exe

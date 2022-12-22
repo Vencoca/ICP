@@ -1,11 +1,16 @@
 #include "mesh.h"
 
+mesh_p_c::mesh_p_c(){}
+
 mesh_p_c::mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint& VAO, GLuint primitive)
-    :vertices(vertices), indices(indices), shader_id(shader_type), VAO(VAO), primitive(primitive){}
+    :vertices(vertices), indices(indices), shader_id(shader_type), VAO(VAO), primitive(primitive) {
+    this->model_matrix = glm::identity<glm::mat4>();
+}
 
 mesh_p_c::mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive)
 :vertices(vertices), indices(indices), shader_id(shader_type), primitive(primitive)
 {
+    this->model_matrix = glm::identity<glm::mat4>();
     GLuint VAO;
     GLuint VBO, EBO;
 

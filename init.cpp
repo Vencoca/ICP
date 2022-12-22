@@ -1,4 +1,4 @@
-#include "init.h"
+﻿#include "init.h"
 
 extern s_globals globals;
 
@@ -44,6 +44,16 @@ void init_glfw(void)
         std::cerr << "GLFW window creation error." << std::endl;
         finalize(EXIT_FAILURE);
     }
+
+    float ratio = static_cast<float>(globals.window_width) / globals.window_height;
+    globals.projectionMatrix = glm::perspective(
+        glm::radians(60.0f), // The vertical Field of View, in radians: the amount of "zoom". Think "camera lens". Usually between 90� (extra wide) and 30� (quite zoomed in)
+        ratio,			     // Aspect Ratio. Depends on the size of your window.
+        0.1f,                // Near clipping plane. Keep as big as possible, or you'll get precision issues.
+        20000.0f              // Far clipping plane. Keep as little as possible.
+    );
+    // set visible area
+    glViewport(0, 0, globals.window_width, globals.window_height);
 
     // Get some GLFW info.
     {

@@ -16,4 +16,6 @@ struct s_globals {
     bool fullscreen;
     double last_update;
     glm::vec4 color;
+    float fov;
+    glm::mat4 projectionMatrix;
 };
