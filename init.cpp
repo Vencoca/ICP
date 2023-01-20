@@ -7,7 +7,9 @@ void init_opengl(void)
     init_glfw();
     glewInit();
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    glEnable(GL_POLYGON_SMOOTH);
+    glEnable(GL_LINE_SMOOTH);
+    //glEnable(GL_CULL_FACE);
 }
 
 void init_glfw(void)

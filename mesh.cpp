@@ -35,6 +35,10 @@ mesh_p_c::mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vecto
     // Set end enable Vertex Attribute 1 = Vertex Colors
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, color)));
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, normal)));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, texcoord)));
+    glEnableVertexAttribArray(3);
 
     // Bind VBO and VAO to 0 to prevent unintended modification
     glBindBuffer(GL_ARRAY_BUFFER, 0);

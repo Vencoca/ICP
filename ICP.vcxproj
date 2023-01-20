@@ -148,23 +148,35 @@
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="OBJloader.cpp" />
     <ClCompile Include="shaders.cpp" />
+    <ClCompile Include="texture.cpp" />
     <ClCompile Include="verticies.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.h" />
     <ClInclude Include="camera.h" />
-    <ClInclude Include="camera2.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="init.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="OBJloader.h" />
     <ClInclude Include="shaders.h" />
+    <ClInclude Include="texture.h" />
     <ClInclude Include="vertex.h" />
     <ClInclude Include="verticies.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\basic.frag" />
     <None Include="resources\basic.vert" />
+    <None Include="resources\light.frag" />
+    <None Include="resources\light.vert" />
+    <None Include="resources\light2.frag" />
+    <None Include="resources\light2.vert" />
+    <None Include="resources\texture.frag" />
+    <None Include="resources\texture.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\box.png" />
+    <Image Include="resources\boxx.png" />
+    <Image Include="resources\TextureDouble_A.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

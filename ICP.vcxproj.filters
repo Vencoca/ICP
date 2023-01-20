@@ -39,6 +39,9 @@
     <ClCompile Include="OBJloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.h">
@@ -62,13 +65,13 @@
     <ClInclude Include="mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="camera2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OBJloader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -79,5 +82,34 @@
     <None Include="resources\basic.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\light.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\light.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\light2.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\light2.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\texture.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\texture.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\box.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\boxx.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\TextureDouble_A.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

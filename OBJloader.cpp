@@ -98,7 +98,7 @@ void createMesh(const char* path, GLuint& shader_mesh, mesh_p_c& mesh, glm::vec3
 	int i = 0;
 	for (glm::vec3 ver : out_vertices)
 	{
-		vertex vert = { ver , color };
+		vertex vert = { ver , color, out_normals[i], out_uvs[i]};
 		vertices.push_back(vert);
 		indices.push_back(i);
 		i++;
