@@ -1,11 +1,2 @@
 ﻿  ICP.cpp
-C:\Users\vacla\Documents\Github\ICP\mesh.h(65,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\vacla\Documents\Github\ICP\mesh.h(76,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\vacla\Documents\Github\ICP\mesh.h(85,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\vacla\Documents\Github\ICP\mesh.h(106,31): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\vacla\Documents\Github\ICP\mesh.h(136,1): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   ICP.vcxproj -> C:\Users\vacla\Documents\Github\ICP\x64\Debug\ICP.exe

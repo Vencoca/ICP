@@ -1,4 +1,5 @@
 #include "shaders.h"
+extern s_globals globals;
 
 void make_shader(std::string vertex_shader, std::string fragment_shader, GLuint* shader) {
     GLuint VS_h, FS_h, prog_h;
@@ -21,6 +22,18 @@ void make_shader(std::string vertex_shader, std::string fragment_shader, GLuint*
     getProgramInfoLog(prog_h);
     *shader = prog_h;
     //glUseProgram(prog_h);
+}
+
+void make_shaders() {
+    GLuint shader_mesh;
+    make_shader("resources/basic.vert", "resources/basic.frag", &shader_mesh);
+    GLuint shader_light;
+    make_shader("resources/light2.vert", "resources/light.frag", &shader_light);
+    GLuint shader_texture;
+    make_shader("resources/texture.vert", "resources/texture.frag", &shader_texture);
+    globals.shader["mesh"] = shader_mesh;
+    globals.shader["light"] = shader_light;
+    globals.shader["texture"] = shader_texture;
 }
 
 std::string textFileRead(const std::string fn) {

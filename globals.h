@@ -1,6 +1,11 @@
 #pragma once
+
 #include <GLFW/glfw3.h> 
 #include <glm/glm.hpp> 
+#include <vector>
+#include <map>
+#include "mesh.h"
+
 
 struct s_globals {
     GLFWwindow* window;
@@ -15,7 +20,9 @@ struct s_globals {
     double app_start_time;
     bool fullscreen;
     double last_update;
-    glm::vec4 color;
     float fov;
+    glm::vec4 color;
     glm::mat4 projectionMatrix;
+    std::map<std::string, GLuint> shader;
+    //std::map<std::string, mesh> meshh;
 };

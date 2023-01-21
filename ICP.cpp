@@ -11,6 +11,7 @@
 #include "camera.h"
 #include "OBJloader.h"
 #include "texture.h"
+#include "shaders.h"
 
 s_globals globals;
 Camera camera = Camera();
@@ -19,42 +20,31 @@ GLuint gen_tex(std::string filepath);
 int main() {
     init_opengl();
     set_all_callbacks();
+    make_shaders();
+
     std::vector<GLuint> indices_mesh;
     std::vector<vertex> vertex_mesh;
-    GLuint shader_mesh;
-    make_shader("resources/basic.vert", "resources/basic.frag", &shader_mesh);
-    GLuint shader_light;
-    make_shader("resources/light2.vert", "resources/light.frag", &shader_light);
-    GLuint shader_texture;
-    make_shader("resources/texture.vert", "resources/texture.frag", &shader_texture);
-
-    GLuint texture_id = textureInit("resources/box.png", false, false);
-
-
     make_triangle(&indices_mesh, &vertex_mesh);
-    mesh_p_c mesh_triangle = mesh_p_c(shader_mesh, vertex_mesh, indices_mesh,GL_TRIANGLES);
-
-    //make_checker(&indices_mesh, &vertex_mesh, 32, 32);
-    //mesh_p_c mesh_checker = mesh_p_c(shader_mesh, vertex_mesh, indices_mesh,GL_TRIANGLE_STRIP);
+    mesh_p_c mesh_triangle = mesh_p_c(globals.shader["mesh"], vertex_mesh, indices_mesh, GL_TRIANGLES);
 
     mesh_p_c mesh_floor = mesh_p_c();
-    createMesh("resources/floor.obj", shader_texture, mesh_floor, { 1.0f,1.0f,1.0f });
+    createMesh("resources/floor.obj", globals.shader["texture"], mesh_floor, { 1.0f,1.0f,1.0f });
     mesh_floor.add_texture_id("resources/floor.jpg");
     mesh_floor.add_material({ 0.3f,0.15f,0.0f }, { 0.8f, 0.4f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 0.0);
 
     mesh_p_c mesh_bunny = mesh_p_c();
-    createMesh("resources/bunny_tri_vnt.obj", shader_mesh, mesh_bunny, { 1.0f,0.0f,0.0f });
+    createMesh("resources/bunny_tri_vnt.obj", globals.shader["mesh"], mesh_bunny, { 1.0f,0.0f,0.0f });
     mesh_bunny.scale(glm::vec3(0.2f));
     mesh_bunny.translate(glm::vec3(20.0f, 3.0f, 20.0f));
 
     mesh_p_c mesh_teapot = mesh_p_c();
-    createMesh("resources/teapot_tri_vnt.obj", shader_light, mesh_teapot, { 0.0f,1.0f,0.0f });
+    createMesh("resources/teapot_tri_vnt.obj", globals.shader["light"], mesh_teapot, { 0.0f,1.0f,0.0f });
     mesh_teapot.scale(glm::vec3(0.2f));
     mesh_teapot.translate(glm::vec3(-20.0f, 3.0f, -20.0f));
     mesh_teapot.add_material({ 0.3f,0.15f,0.0f }, { 0.8f, 0.4f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 30.0);
 
     mesh_p_c mesh_box = mesh_p_c();
-    createMesh("resources/box.obj", shader_texture, mesh_box, { 0.0f, 0.0f, 0.0f });
+    createMesh("resources/box.obj", globals.shader["texture"], mesh_box, { 0.0f, 0.0f, 0.0f });
     mesh_box.translate(glm::vec3(-4.0f, 1.0f, 4.0f));
     mesh_box.add_material({ 0.3f,0.15f,0.0f }, { 0.8f, 0.4f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 30.0);
     mesh_box.add_texture_id("resources/box.png");
