@@ -17,6 +17,6 @@ bool loadOBJ(
 	std::vector < glm::vec3 >& out_normals
 );
 
-void createMesh(const char* path, GLuint& shader_mesh, mesh_p_c& mesh, glm::vec3 color);
+void createMesh(const char* path, GLuint& shader_mesh, mesh& mesh_out, glm::vec3 color);
 
 #endif

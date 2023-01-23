@@ -25,25 +25,25 @@ int main() {
     std::vector<GLuint> indices_mesh;
     std::vector<vertex> vertex_mesh;
     make_triangle(&indices_mesh, &vertex_mesh);
-    mesh_p_c mesh_triangle = mesh_p_c(globals.shader["mesh"], vertex_mesh, indices_mesh, GL_TRIANGLES);
+    mesh mesh_triangle = mesh(globals.shader["mesh"], vertex_mesh, indices_mesh, GL_TRIANGLES);
 
-    mesh_p_c mesh_floor = mesh_p_c();
+    mesh mesh_floor = mesh();
     createMesh("resources/floor.obj", globals.shader["texture"], mesh_floor, { 1.0f,1.0f,1.0f });
     mesh_floor.add_texture_id("resources/floor.jpg");
     mesh_floor.add_material({ 0.3f,0.15f,0.0f }, { 0.8f, 0.4f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 0.0);
 
-    mesh_p_c mesh_bunny = mesh_p_c();
+    mesh mesh_bunny = mesh();
     createMesh("resources/bunny_tri_vnt.obj", globals.shader["mesh"], mesh_bunny, { 1.0f,0.0f,0.0f });
     mesh_bunny.scale(glm::vec3(0.2f));
     mesh_bunny.translate(glm::vec3(20.0f, 3.0f, 20.0f));
 
-    mesh_p_c mesh_teapot = mesh_p_c();
+    mesh mesh_teapot = mesh();
     createMesh("resources/teapot_tri_vnt.obj", globals.shader["light"], mesh_teapot, { 0.0f,1.0f,0.0f });
     mesh_teapot.scale(glm::vec3(0.2f));
     mesh_teapot.translate(glm::vec3(-20.0f, 3.0f, -20.0f));
     mesh_teapot.add_material({ 0.3f,0.15f,0.0f }, { 0.8f, 0.4f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 30.0);
 
-    mesh_p_c mesh_box = mesh_p_c();
+    mesh mesh_box = mesh();
     createMesh("resources/box.obj", globals.shader["texture"], mesh_box, { 0.0f, 0.0f, 0.0f });
     mesh_box.translate(glm::vec3(-4.0f, 1.0f, 4.0f));
     mesh_box.add_material({ 0.3f,0.15f,0.0f }, { 0.8f, 0.4f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 30.0);

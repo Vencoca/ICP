@@ -1,13 +1,13 @@
 #include "mesh.h"
 
-mesh_p_c::mesh_p_c(){}
+mesh::mesh(){}
 
-mesh_p_c::mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint& VAO, GLuint primitive)
+mesh::mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint& VAO, GLuint primitive)
     :vertices(vertices), indices(indices), shader_id(shader_type), VAO(VAO), primitive(primitive) {
     this->model_matrix = glm::identity<glm::mat4>();
 }
 
-mesh_p_c::mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive)
+mesh::mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive)
 :vertices(vertices), indices(indices), shader_id(shader_type), primitive(primitive)
 {
     this->model_matrix = glm::identity<glm::mat4>();
@@ -48,18 +48,18 @@ mesh_p_c::mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vecto
     this->VAO = VAO;
 }
 
-void mesh_p_c::add_material(glm::vec3 ambient_material, glm::vec3 diffuse_material, glm::vec3 specular_material, float specular_shinines) {
+void mesh::add_material(glm::vec3 ambient_material, glm::vec3 diffuse_material, glm::vec3 specular_material, float specular_shinines) {
     this->ambient_material = ambient_material;
     this->diffuse_material = diffuse_material;
     this->specular_material = specular_material;
     this->specular_shinines = specular_shinines;
 }
 
-void mesh_p_c::add_texture_id(const char* path) {
+void mesh::add_texture_id(const char* path) {
     this->texture_id = textureInit(path, false, false);
 }
 
-void mesh_p_c::draw_with_material(const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position) {
+void mesh::draw_with_material(const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position) {
     glUseProgram(shader_id);
     glUniformMatrix4fv(glGetUniformLocation(shader_id, "uP_m"), 1, GL_FALSE, glm::value_ptr(P));
     glUniformMatrix4fv(glGetUniformLocation(shader_id, "uV_m"), 1, GL_FALSE, glm::value_ptr(V));
@@ -83,7 +83,7 @@ void mesh_p_c::draw_with_material(const glm::mat4& V, const glm::mat4& P, const 
 }
 
 
-void mesh_p_c::draw(const glm::mat4& M, const glm::mat4& V, const glm::mat4& P) {
+void mesh::draw(const glm::mat4& M, const glm::mat4& V, const glm::mat4& P) {
     glUseProgram(shader_id);
     glUniformMatrix4fv(glGetUniformLocation(shader_id, "uP_m"), 1, GL_FALSE, glm::value_ptr(P));
     glUniformMatrix4fv(glGetUniformLocation(shader_id, "uV_m"), 1, GL_FALSE, glm::value_ptr(V));
@@ -92,7 +92,7 @@ void mesh_p_c::draw(const glm::mat4& M, const glm::mat4& V, const glm::mat4& P) 
     glDrawElements(primitive, indices.size(), GL_UNSIGNED_INT, 0);
 }
 
-void mesh_p_c::draw(const glm::mat4& V, const glm::mat4& P) {
+void mesh::draw(const glm::mat4& V, const glm::mat4& P) {
     glUseProgram(shader_id);
     glUniformMatrix4fv(glGetUniformLocation(shader_id, "uP_m"), 1, GL_FALSE, glm::value_ptr(P));
     glUniformMatrix4fv(glGetUniformLocation(shader_id, "uV_m"), 1, GL_FALSE, glm::value_ptr(V));
@@ -101,24 +101,24 @@ void mesh_p_c::draw(const glm::mat4& V, const glm::mat4& P) {
     glDrawElements(primitive, indices.size(), GL_UNSIGNED_INT, 0);
 }
 
-void mesh_p_c::rotate(glm::f32 angle, glm::vec3 axis) {
+void mesh::rotate(glm::f32 angle, glm::vec3 axis) {
 
     model_matrix = glm::rotate(model_matrix, angle, axis);
 };
-void mesh_p_c::translate(glm::vec3 vector) {
+void mesh::translate(glm::vec3 vector) {
 
     model_matrix = glm::translate(model_matrix, vector);
 };
-void mesh_p_c::scale(glm::vec3 vector) {
+void mesh::scale(glm::vec3 vector) {
     model_matrix = glm::scale(model_matrix, vector);
 };
 
-void mesh_p_c::reset_mm() {
+void mesh::reset_mm() {
     model_matrix = glm::identity<glm::mat4>();
 };
 
 
-void mesh_p_c::draw_repeat(const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position, int repeat, int scale) {
+void mesh::draw_repeat(const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position, int repeat, int scale) {
     this->scale(glm::vec3(scale));
     for (int i = 0; i < repeat; i++) {
         for (int j = 0; j < repeat; j++) {

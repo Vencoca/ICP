@@ -87,7 +87,7 @@ bool loadOBJ(const char* path, std::vector < glm::vec3 >& out_vertices, std::vec
 }
 
 
-void createMesh(const char* path, GLuint& shader_mesh, mesh_p_c& mesh, glm::vec3 color) {
+void createMesh(const char* path, GLuint& shader_mesh, mesh& mesh_out, glm::vec3 color) {
 	std::vector < glm::vec3 > out_vertices;
 	std::vector < glm::vec2 > out_uvs;
 	std::vector < glm::vec3 > out_normals;
@@ -103,5 +103,5 @@ void createMesh(const char* path, GLuint& shader_mesh, mesh_p_c& mesh, glm::vec3
 		indices.push_back(i);
 		i++;
 	};
-	mesh = mesh_p_c(shader_mesh, vertices, indices, GL_TRIANGLES);
+	mesh_out = mesh(shader_mesh, vertices, indices, GL_TRIANGLES);
 }

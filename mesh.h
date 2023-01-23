@@ -8,15 +8,8 @@
 #include "vertex.h"
 #include "texture.h"
 
-struct vertex_p {
-    glm::vec3 position;
-};
 
-// mesh classes
-class Mesh {};
-
-
-class mesh_p_c {
+class mesh {
 public:
     std::vector<vertex> vertices;
     std::vector<GLuint> indices;
@@ -28,9 +21,9 @@ public:
     float specular_shinines;
     GLuint texture_id;
 
-    mesh_p_c();
-    mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint& VAO, GLuint primitive);
-    mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive = GL_TRIANGLES);
+    mesh();
+    mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint& VAO, GLuint primitive);
+    mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive = GL_TRIANGLES);
 
     void add_material(glm::vec3 ambient_material, glm::vec3 diffuse_material, glm::vec3 specular_material, float specular_shinines);
     void add_texture_id(const char* path);

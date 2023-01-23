@@ -1,2 +1,14 @@
 ﻿  ICP.cpp
+  OBJloader.cpp
+  mesh.cpp
+C:\Users\vacla\Documents\Github\ICP\mesh.cpp(81,65): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\vacla\Documents\Github\ICP\mesh.cpp(92,65): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\vacla\Documents\Github\ICP\mesh.cpp(101,65): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\vacla\Documents\Github\ICP\mesh.cpp(122,27): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  shaders.cpp
+  Generating Code...
   ICP.vcxproj -> C:\Users\vacla\Documents\Github\ICP\x64\Debug\ICP.exe
