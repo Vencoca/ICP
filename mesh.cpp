@@ -117,9 +117,12 @@ void mesh::reset_mm() {
     model_matrix = glm::identity<glm::mat4>();
 };
 
+void mesh::translate_s(glm::vec3 vector) {
+    model_matrix = glm::identity<glm::mat4>();
+    model_matrix = glm::translate(model_matrix, vector);
+};
 
-void mesh::draw_repeat(const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position, int repeat, int scale) {
-    this->scale(glm::vec3(scale));
+void mesh::draw_repeat(const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position, int repeat) {
     for (int i = 0; i < repeat; i++) {
         for (int j = 0; j < repeat; j++) {
             this->reset_mm();

@@ -24,5 +24,5 @@ struct s_globals {
     glm::vec4 color;
     glm::mat4 projectionMatrix;
     std::map<std::string, GLuint> shader;
-    //std::map<std::string, mesh> meshh;
+    std::map<std::string, mesh> mesh;
 };

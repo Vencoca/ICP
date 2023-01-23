@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="arena.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="ICP.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="verticies.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="arena.h" />
     <ClInclude Include="callbacks.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="globals.h" />

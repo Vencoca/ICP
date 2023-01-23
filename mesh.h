@@ -34,5 +34,6 @@ public:
     void translate(glm::vec3 vector);
     void scale(glm::vec3 vector);
     void reset_mm();
-    void draw_repeat(const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position, int repeat, int scale);
+    void draw_repeat(const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position, int repeat);
+    void translate_s(glm::vec3 vector);
 };

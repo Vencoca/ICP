@@ -3,13 +3,16 @@
 #include "mesh.h"
 #include <list>
 #include "globals.h"
+#include "verticies.h"
+#include "OBJloader.h"
+
+void prepare_meshes();
 
 class obstacle {
 public:
     int posx;
     int posy;
 };
-
 
 class arena {
 public:
@@ -18,5 +21,6 @@ public:
 
     arena(int size);
 
-    void drawArena();
+    void drawArena(glm::mat4 v_m);
 };
+
