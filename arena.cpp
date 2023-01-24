@@ -3,10 +3,13 @@ extern s_globals globals;
 
 arena::arena(int size) {
     this->size = size;
+    this->score = 0;
+    generatePrize();
     generateObstacles();
 }
 
 obstacle::obstacle(int posx, int posy) :posx(posx), posy(posy){};
+obstacle::obstacle() {};
 
 void arena::generateObstacles() {
     std::random_device rd; // obtain a random number from hardware
@@ -15,6 +18,14 @@ void arena::generateObstacles() {
     for (int n = 0; n < size*2; ++n) {
         obstacles.push_back(obstacle(distr(gen), distr(gen)));
     }
+}
+
+void arena::generatePrize() {
+    std::random_device rd; // obtain a random number from hardware
+    std::mt19937 gen(rd()); // seed the generator
+    std::uniform_int_distribution<> distr(0, this->size-1); // define the range
+    this->prize = obstacle(distr(gen), distr(gen));
+    std::cout << "\nx: " << prize.posx << "y: " << prize.posy << "\n";
 }
 
 void arena::drawArena(glm::mat4 v_m) {
@@ -32,14 +43,20 @@ void arena::drawArena(glm::mat4 v_m) {
     globals.mesh["box"].translate_s(glm::vec3(size*2, 1.001f, size * 2));
     globals.mesh["box"].draw_with_material(v_m, globals.projectionMatrix, glm::vec3(-20.0f, 10.0f, -20.0f));
 
+    
+    drawInArena(v_m, prize.posx, prize.posy, "teapot", 1, true);
     drawObstacles(v_m);
 }
 
-void arena::drawInArena(glm::mat4 v_m, int posx, int posy, std::string mesh_name) {
+void arena::drawInArena(glm::mat4 v_m, int posx, int posy, std::string mesh_name, int scale, bool rotate) {
     if (posx >= 0 && posx < size && posy >= 0 && posy < size) {
         if (auto search = globals.mesh.find(mesh_name); search != globals.mesh.end()) {
             globals.mesh[mesh_name].translate_s(glm::vec3(posx * 2, 1.001f, posy * 2));
-            globals.mesh["box"].draw_with_material(v_m, globals.projectionMatrix, glm::vec3(-20.0f, 10.0f, -20.0f));
+            globals.mesh[mesh_name].scale(glm::vec3(scale));
+            if (rotate) {
+                globals.mesh[mesh_name].rotate(glm::radians(100.0f * (float)glfwGetTime()), glm::vec3(0.0f, 0.1f, 0.0f));
+            }
+            globals.mesh[mesh_name].draw_with_material(v_m, globals.projectionMatrix, glm::vec3(-20.0f, 10.0f, -20.0f));
         }
     }
 
@@ -48,12 +65,17 @@ void arena::drawInArena(glm::mat4 v_m, int posx, int posy, std::string mesh_name
 void arena::drawObstacles(glm::mat4 v_m) {
     for (auto const& o : obstacles)
     {
-        drawInArena(v_m,o.posx, o.posy, "box");
+        drawInArena(v_m,o.posx, o.posy, "box", 1, false);
     }
 }
 
 bool arena::checkColisions(glm::vec3 position) {
     float magic_const = 0.1;
+    if (position.x + magic_const > (prize.posx * 2) - 1 && position.z + magic_const > (prize.posy * 2) - 1 && position.z - magic_const < (prize.posy * 2) + 1 && position.x - magic_const < (prize.posx * 2) + 1) {
+        score++;
+        generatePrize();
+        std::cout << "Score: " << score << "\n";
+    }
     if (position.x < -1+magic_const || position.x > size*2-1-magic_const || position.z < -1 + magic_const || position.z > size*2-1 - magic_const) {
         return true;
     }
@@ -84,7 +106,7 @@ void prepare_meshes() {
     globals.mesh["bunny"] = mesh_bunny;
 
     mesh mesh_teapot = mesh();
-    createMesh("resources/teapot_tri_vnt.obj", globals.shader["light"], mesh_teapot, { 0.0f,1.0f,0.0f });
+    createMesh("resources/teapot.obj", globals.shader["light"], mesh_teapot, { 0.0f,1.0f,0.0f });
     mesh_teapot.add_material({ 0.3f,0.15f,0.0f }, { 0.8f, 0.4f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 30.0);
     globals.mesh["teapot"] = mesh_teapot;
 

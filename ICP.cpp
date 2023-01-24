@@ -40,13 +40,6 @@ int main() {
             a.drawArena(v_m);
          
             globals.mesh["bunny"].draw(v_m, globals.projectionMatrix);
-           
-            globals.mesh["teapot"].reset_mm();
-            globals.mesh["teapot"].scale(glm::vec3(0.2f));
-            globals.mesh["teapot"].translate(glm::vec3(10.0f, 0.0f, 10.0f));
-            
-            globals.mesh["teapot"].rotate(glm::radians(100.0f * (float)glfwGetTime()), glm::vec3(0.0f, 0.1f, 0.0f));
-            globals.mesh["teapot"].draw_with_material(v_m, globals.projectionMatrix, glm::vec3(-20.0f, 10.0f, -20.0f));
         }
         glfwSwapBuffers(globals.window);
         frame_cnt += 1;

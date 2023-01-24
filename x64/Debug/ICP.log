@@ -1,2 +1,8 @@
-﻿  ICP.cpp
+﻿  arena.cpp
+C:\Users\vacla\Documents\Github\ICP\arena.cpp(55,53): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\vacla\Documents\Github\ICP\arena.cpp(73,28): warning C4305: 'initializing': truncation from 'double' to 'float'
   ICP.vcxproj -> C:\Users\vacla\Documents\Github\ICP\x64\Debug\ICP.exe
