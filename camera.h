@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <opencv2\opencv.hpp>
 #include "globals.h"
+#include "arena.h"
 
 class Camera
 {

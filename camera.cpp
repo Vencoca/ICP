@@ -2,6 +2,7 @@
 
 extern s_globals globals;
 extern Camera camera;
+extern arena a;
 
 Camera::Camera()
 {
@@ -61,24 +62,32 @@ void Camera::Move_with_camera(Camera::direction direction) {
     //Chodi po plose
     glm::vec3 dir = -glm::normalize(glm::cross(this->Right, glm::vec3(0.0f, 1.0f, 0.0f)))*this->MovementSpeed; 
 
+    glm::vec3 old_position = position;
+    glm::vec3 old_pos = point_of_sight;
+
     switch (direction)
     {
     case direction::FORWARD:
         this->position = this->position + dir;
         this->point_of_sight = this->position + this->Front;
-        return;
+        break;
     case direction::BACKWARD:
         this->position = this->position - dir;
         this->point_of_sight = this->position + this->Front;
-        return;
+        break;
     case direction::LEFT:
         this->position = this->position - lrdir;
         this->point_of_sight = this->point_of_sight - lrdir;
-        return;
+        break;
     case direction::RIGHT:
         this->position = this->position + lrdir;
         this->point_of_sight = this->point_of_sight + lrdir;
-        return;
+        break;
+    }
+
+    if (a.checkColisions(position)) {
+        this->position = old_position;
+        this->point_of_sight = old_pos;
     }
 }
 
