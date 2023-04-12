@@ -72,12 +72,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExecutablePath>$(ProjectDir)bin;$(OPENCV_DIR)\x64\vc15\bin;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(ProjectDir)include;$(OPENCV_DIR)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)include;D:\opencv\build\include;$(OPENCV_DIR)\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib;$(OPENCV_DIR)\x64\vc15\lib;$(OPENCV_DIR)\x64\vc15\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ExecutablePath>$(ProjectDir)bin;$(OPENCV_DIR)\x64\vc15\bin;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(ProjectDir)include;$(OPENCV_DIR)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)include;D:\opencv\build\include;$(OPENCV_DIR)\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib;$(OPENCV_DIR)\x64\vc15\lib;$(OPENCV_DIR)\x64\vc15\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
